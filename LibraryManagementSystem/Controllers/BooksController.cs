@@ -1,5 +1,6 @@
 using LibraryManagementSystem.Data;
 using LibraryManagementSystem.Domain;
+using LibraryManagementSystem.Migrations;
 using LibraryManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,8 @@ public class BooksController(LibraryContext context) : Controller
         var books = context.Books
             .Include(b => b.Loans.Where(l => l.ReturnDate == null))
             // DO NOT MODIFY ABOVE THIS LINE
-            // TODO: 10. Include Authors in the query
             // Notice: We will have to use SQL Joins if we were not using ORM like Entity Framework
-            
+            .Include(b => b.Authors)
             // DO NOT MODIFY BELOW THIS LINE
             .ToList();
         return View(books);
