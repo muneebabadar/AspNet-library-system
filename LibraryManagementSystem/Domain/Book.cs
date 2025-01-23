@@ -17,15 +17,13 @@ namespace LibraryManagementSystem.Domain
         public ICollection<Loan> Loans { get; set; } = new List<Loan>();
         // A book may have been written by many authors
         // This will make the relationship between Book and Author many-to-many
-        public ICollection<Author> Authors { get; set; } = new List<Author>();
+        public ICollection<Author>? Authors { get; set; } = new List<Author>();
         public virtual bool IsAvailable()
         {
             // DO NOT MODIFY ABOVE THIS LINE
             // This method should return true if the book is not currently on loan (No entry in Loans collection)
             // or if it was on loan but has been returned (loan.ReturnDate is not null for all Loans)
-            // TODO: 1.1 Implement the IsAvailable method
-
-            throw new NotImplementedException("Book.IsAvailable is not implemented");
+            return Loans.Count == 0 || Loans.All(l => l.ReturnDate != null);
             // DO NOT MODIFY BELOW THIS LINE
         }
 
@@ -39,8 +37,25 @@ namespace LibraryManagementSystem.Domain
             // If the book has multiple authors, the names should be separated by commas and the last name should be preceded by 'and'
             // If the book has only one author, the name should be returned as is or "unknown" if the author's name is null
             // If the book has no authors, an empty string should be returned
-            // TODO: 1.2 Implement the AuthorsToString method
-            throw new NotImplementedException("Book.AuthorsToString is not implemented");
+            if (Authors == null || !Authors.Any())
+            {
+                return string.Empty;
+            }
+
+            // Extract author names, replacing null names with "unknown"
+            var authorNames = Authors.Select(author => author.Name ?? "unknown").ToList();
+
+            // If only one author, return their name
+            if (authorNames.Count == 1)
+            {
+                return authorNames[0];
+            }
+
+            // If multiple authors, format them with commas and 'and'
+            var allExceptLast = authorNames.Take(authorNames.Count - 1);
+            var lastAuthor = authorNames.Last();
+
+            return $"{string.Join(", ", allExceptLast)} and {lastAuthor}";
             // DO NOT MODIFY BELOW THIS LINE
         }
     }
