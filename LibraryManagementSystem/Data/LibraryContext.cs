@@ -1,5 +1,6 @@
 using Bogus;
 using LibraryManagementSystem.Domain;
+using LibraryManagementSystem.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Data;
@@ -20,8 +21,9 @@ public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContex
         // separately.
         modelBuilder.Entity<Loan>().HasIndex(m => m.ReturnDate);
         // DO NOT MODIFY ABOVE THIS LINE
-        // TODO: 7. Add indexes for Book.Title, Book.ISBN, Author.Name
-        
+        modelBuilder.Entity<Book>().HasIndex(n => n.Title);
+        modelBuilder.Entity<Book>().HasIndex(n => n.ISBN);
+        modelBuilder.Entity<Author>().HasIndex(q => q.Name);
         // DO NOT MODIFY BELOW THIS LINE
     }
 }
